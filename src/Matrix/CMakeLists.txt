@@ -1,5 +1,4 @@
-set( target Vector )
-
+set( target Matrix )
 
 add_library( ${target} INTERFACE )
 

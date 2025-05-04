@@ -16,8 +16,13 @@ add_executable( ${target} ${sources} )
 target_link_libraries( ${target} 
     PUBLIC
         Vector
+        Matrix
         Utilities
     )
 
 target_compile_options( ${target} PUBLIC -O3 )
+
+target_include_directories(LinearAlg PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Interfaces
+)
 
