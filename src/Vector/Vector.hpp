@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Assert.hpp"
+#include "IVector.hpp"
 
 // std
 #include <type_traits>
@@ -10,12 +11,14 @@
 #include <initializer_list>
 #include <string> 
 #include <sstream>
+#include <iostream>
 
 namespace linear_algebra 
 {
 
 template <typename T>
 class Vector
+    : public IVector<T>
 {
     public: 
         Vector(size_t size) : data(size)
@@ -36,13 +39,13 @@ class Vector
 
         ~Vector() = default;
 
-        int operator [](size_t index) const
+        virtual int operator[](size_t index) const override
         {
             return data[index];
         };
 
         // Multiplication by a scalar
-        void operator *(T&& scalar)
+        void operator *(T&& scalar) override
         {
             for (size_t i = 0; i < data.size(); ++i)
             {
@@ -61,7 +64,7 @@ class Vector
             return result;
         }
 
-        inline void multiply(T&& scalar) { 
+        inline void multiply(T&& scalar) override { 
             for (size_t i = 0; i < data.size(); ++i)
             {
                 data[i] *= scalar;
@@ -69,21 +72,22 @@ class Vector
         }
 
         // Dot product of two vectors
-        int operator *( Vector<T>& vector )
+        int operator *( IVector<T>& vector ) override
         {
-            L_ASSERT( data.size() == vector.data.size(), "Vectors must be of the same size", AssertLevel::CRITICAL );
+            std::vector<T>& vector_data = vector.getData();
+            L_ASSERT( data.size() == vector_data.size(), "Vectors must be of the same size", AssertLevel::CRITICAL );
 
             int result = 0;
             for (size_t i = 0; i < data.size(); ++i)
             {
-                int product = data[i] * vector.data[i];
+                int product = data[i] * vector_data[i];
                 result += product;
             }
 
             return result;
         }
 
-        void print()
+        void print() override
         {
             std::ostringstream s("");
             for (size_t i = 0; i < data.size() - 1; ++i)
@@ -94,9 +98,9 @@ class Vector
             std::cout << s.str();
         }
 
-        inline int dot( Vector<T>&& vector ) { return (*this * vector); }
+        inline int dot( IVector<T>&& vector ) override { return (*this * vector); }
             
-        void operator /(T&& scalar)
+        void operator /(T&& scalar) override
         {
             if ( scalar == 0 )
             {
@@ -108,7 +112,7 @@ class Vector
             }
         }
 
-        int at(size_t index) const
+        int at(size_t index) const override
         {
             if (index < data.size())
             {
@@ -118,7 +122,7 @@ class Vector
             return -1;
         };
 
-        void set( size_t index, T value )
+        void set( size_t index, T value ) override
         {
             if (index < data.size())
             {
@@ -129,6 +133,11 @@ class Vector
                 throw std::out_of_range("Index out of range");
             }
         };
+
+        std::vector<T>& getData() override
+        {
+            return data;
+        }
 
         // TODO: Implement the cross product 
         //      when Matrices are implemented
