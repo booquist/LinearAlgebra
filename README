@@ -1,113 +1,33 @@
-# LinearAlg
+# MyLinAlg
 
-WARNING: This project is a MASSIVE work in progress, and really just a way for me to 
-solidify my knowledge of linear algebra. It is not meant as a competitor to major linear 
-algebra frameworks, but a fun open source project to learn from.
-Also... yes I did get ChatGPT to generate the project structure portion below. 
-
-A modern C++17 linear algebra library focused on performance and usability.
-
-## Overview
-
-LinearAlg is a lightweight linear algebra library implemented in C++17. The library provides vector operations, matrix manipulations, and other utilities for computational mathematics and scientific computing applications.
+Modern C++17 header-only linear algebra library with optional BLAS backend.
 
 ## Features
 
-- Vector operations (addition, subtraction, dot product, cross product, etc.)
-- Matrix operations (coming soon)
-- Modern C++17 implementation
-- Clean API design
+- Templated `Matrix<T, Rows, Cols>` with static/dynamic sizes
+- Row-major storage (only)
+- Expression templates for basic arithmetic
+- Core operations: transpose, dot, cross, norm, determinant, inverse
+- LU decomposition and solve API
+- GoogleTest unit tests
 
-## Project Structure
+## Build
 
 ```
-LinearAlg/
-├── CMakeLists.txt
-├── main.cpp
-├── src/
-│   ├── CMakeLists.txt
-│   ├── Vector/
-│   │   ├── CMakeLists.txt
-│   │   ├── Vector.hpp
-│   │   └── Vector.cpp
-│   └── Utilities/
-│       ├── CMakeLists.txt
-│       ├── Utilities.hpp
-│       └── Utilities.cpp
-├── build/
-└── README.md
+cmake -S . -B build -DMYLIB_BUILD_TESTS=ON -DMYLIB_BUILD_EXAMPLES=ON
+cmake --build build -j
+ctest --test-dir build
 ```
 
-## Prerequisites
+## Install
 
-- C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 19.14+)
-- CMake 3.10 or higher
-
-## Building the Project
-
-To build the project:
-
-```bash
-# Create and enter the build directory
-mkdir -p build
-cd build
-
-# Configure the project
-cmake ..
-
-# Build the project
-cmake --build .
+```
+cmake --install build --prefix /your/prefix
 ```
 
-Alternatively, you can use:
+Then in another project:
 
-```bash
-# Configure and build in one step
-cmake -B build -S .
-cmake --build build
 ```
-
-The executable will be created in the build directory.
-
-## Usage
-
-```cpp
-#include "Vector/Vector.hpp"
-#include "Utilities/Utilities.hpp"
-#include <iostream>
-
-int main() {
-    // Create vectors
-    Vector3D v1(1.0, 2.0, 3.0);
-    Vector3D v2(4.0, 5.0, 6.0);
-    
-    // Perform operations
-    Vector3D sum = v1 + v2;
-    double dotProduct = v1.dot(v2);
-    Vector3D crossProduct = v1.cross(v2);
-    
-    // Output results
-    std::cout << "Sum: " << sum << std::endl;
-    std::cout << "Dot product: " << dotProduct << std::endl;
-    std::cout << "Cross product: " << crossProduct << std::endl;
-    
-    return 0;
-}
+find_package(MyLinAlg REQUIRED)
+target_link_libraries(your_target PRIVATE MyLinAlg::MyLinAlg)
 ```
-
-## Future Additions
-
-- Matrix operations
-- Eigenvalue decomposition
-- LU decomposition
-- QR factorization
-- Singular value decomposition (SVD)
-- Integration with BLAS/LAPACK for high-performance operations
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
