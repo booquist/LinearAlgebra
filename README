@@ -1,4 +1,4 @@
-# MyLinAlg
+# LinAlgLite
 
 Modern C++17 header-only linear algebra library with optional BLAS backend.
 
